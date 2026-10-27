@@ -1,0 +1,22 @@
+[Unit]
+Description=Gas Station Server
+After=network.target mysql.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/gas-station
+Environment="DB_HOST=127.0.0.1"
+Environment="DB_PORT=3306"
+Environment="DB_NAME=gas_station"
+Environment="DB_USER=root"
+Environment="DB_PASSWORD=root"
+Environment="JWT_SECRET=gas-station-default-secret-please-change"
+ExecStart=/usr/bin/java -Xms256m -Xmx512m -jar /opt/gas-station/gas-station-server.jar --spring.profiles.active=prod
+Restart=always
+RestartSec=5
+StandardOutput=append:/opt/gas-station/logs/console.log
+StandardError=append:/opt/gas-station/logs/console.log
+
+[Install]
+WantedBy=multi-user.target
