@@ -113,6 +113,21 @@ npm run dev      # http://localhost:9528
 - `/api/app/**`：小程序会员（角色 `MEMBER`）
 - `/api/admin/**`：后台用户（角色 `ADMIN` / `MANAGER` / `STAFF`）
 
-## 五、许可
+## 五、线上部署信息（149.88.70.82 / 宝塔面板）
+
+| 项目 | 地址 / 位置 |
+| --- | --- |
+| 管理后台 | https://gas.tsu2026.top |
+| 后端接口 | https://gas.tsu2026.top/api |
+| 后端 jar | `/www/wwwroot/gas-station/gas-station-server.jar`（端口 8080，JDK 17，面板 Java 项目 `gas-station-server`） |
+| 前端静态 | `/www/wwwroot/gas-station-admin`（Nginx 站点 `gas.tsu2026.top`，`/api` 反代 8080） |
+| 外置配置 | `/www/wwwroot/gas-station/application-prod.yml`（数据源、JWT、微信） |
+| 数据库 | `alvin_gas`（MySQL，账号 `alvin_gas`） |
+| HTTPS | Let's Encrypt（certbot webroot 签发，续期钩子自动 `nginx -s reload`） |
+| 日志 | `/opt/gas-station/logs/gas-station-server.log` |
+
+小程序 `miniprogram/config.js` 已指向 `https://gas.tsu2026.top`；若要在小程序中正式使用，还需在微信公众平台把该域名加入 request 合法域名。
+
+## 六、许可
 
 MIT License

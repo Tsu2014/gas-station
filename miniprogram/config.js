@@ -1,7 +1,8 @@
 /**
  * 小程序全局配置
- * 真机调试请改为局域网地址，例如 http://192.168.1.8:8080
+ * 线上地址（已部署）：https://gas.tsu2026.top
+ * 本地联调需勾选「不校验合法域名」并改为 http://localhost:8080
  */
 module.exports = {
-  baseUrl: 'http://localhost:8080'
+  baseUrl: 'https://gas.tsu2026.top'
 }
