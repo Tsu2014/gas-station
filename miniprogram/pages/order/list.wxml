@@ -1,0 +1,28 @@
+<view class="container">
+  <view style="display:flex;background:#fff;border-radius:16rpx;padding:10rpx;margin-bottom:20rpx">
+    <view wx:for="{{tabs}}" wx:key="label" data-index="{{index}}" bindtap="switchTab"
+          style="flex:1;text-align:center;padding:14rpx 0;color:{{activeTab === index ? '#ff6a00' : '#666'}};
+                 font-weight:{{activeTab === index ? 'bold' : 'normal'}}">{{item.label}}</view>
+  </view>
+
+  <view wx:if="{{orders.length === 0}}" class="empty">暂无订单</view>
+
+  <view class="card" wx:for="{{orders}}" wx:key="id">
+    <view class="row-between">
+      <text style="font-weight:bold">{{item.stationName || '加油站'}}</text>
+      <text class="tag">{{statusText[item.status]}}</text>
+    </view>
+    <view class="muted" style="margin-top:10rpx">{{item.fuelType}}　{{item.liters}} 升　{{item.gunNo ? item.gunNo + ' 号枪' : ''}}</view>
+    <view class="row-between" style="margin-top:12rpx">
+      <text class="muted">{{item.createTime}}</text>
+      <text class="price">¥ {{item.payAmount}}</text>
+    </view>
+    <view style="display:flex;justify-content:flex-end;margin-top:16rpx" wx:if="{{item.status === 0}}">
+      <view style="width:180rpx;margin-right:16rpx" class="btn-default" data-orderno="{{item.orderNo}}" catchtap="cancel">取消</view>
+      <view style="width:180rpx" class="btn-primary" data-orderno="{{item.orderNo}}" catchtap="pay">去支付</view>
+    </view>
+    <view style="text-align:right;margin-top:12rpx" wx:else>
+      <text style="color:#409eff" data-orderno="{{item.orderNo}}" bindtap="goDetail">查看详情</text>
+    </view>
+  </view>
+</view>

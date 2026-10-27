@@ -1,0 +1,48 @@
+<view class="container">
+  <view class="card" wx:if="{{member}}">
+    <view class="row-between">
+      <view>
+        <view style="font-size:32rpx;font-weight:bold">{{member.nickname}}</view>
+        <view class="muted" style="margin-top:8rpx">{{member.phone || '未绑定手机号'}}</view>
+      </view>
+      <text class="tag">Lv.{{member.level}}</text>
+    </view>
+    <view style="display:flex;margin-top:24rpx;text-align:center">
+      <view style="flex:1">
+        <view class="price">¥ {{member.balance}}</view>
+        <view class="muted">账户余额</view>
+      </view>
+      <view style="flex:1">
+        <view class="price">{{member.points}}</view>
+        <view class="muted">积分</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card" wx:else>
+    <view class="muted" style="text-align:center;padding:20rpx 0">登录后可查看余额、积分与订单</view>
+    <view class="btn-primary" bindtap="login">微信一键登录</view>
+  </view>
+
+  <view class="card" wx:if="{{member}}">
+    <view class="row-between" style="padding:16rpx 0;border-bottom:1rpx solid #f2f2f2" bindtap="goOrders">
+      <text>我的订单</text><text class="muted">›</text>
+    </view>
+    <view class="row-between" style="padding:16rpx 0" bindtap="goCoupons">
+      <text>我的优惠券</text><text class="muted">›</text>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{logs.length > 0}}">
+    <view style="font-weight:bold;margin-bottom:12rpx">最近流水</view>
+    <view class="row-between" wx:for="{{logs}}" wx:key="id" style="padding:12rpx 0;border-bottom:1rpx solid #f2f2f2">
+      <view>
+        <text>{{item.remark || '余额变动'}}</text>
+        <view class="muted">{{item.createTime}}</view>
+      </view>
+      <text style="color:{{item.amount >= 0 ? '#67c23a' : '#f56c6c'}}">{{item.amount}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{member}}" class="btn-default" bindtap="logout">退出登录</view>
+</view>

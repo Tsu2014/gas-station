@@ -1,0 +1,30 @@
+{
+  "name": "gas-station-admin",
+  "version": "1.0.0",
+  "description": "智慧加油站平台 - 运营管理后台",
+  "private": true,
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build:prod": "vue-cli-service build"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "core-js": "^3.8.3",
+    "echarts": "^5.4.3",
+    "element-ui": "^2.15.14",
+    "vue": "2.6.14",
+    "vue-router": "^3.5.4",
+    "vuex": "^3.6.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "vue-template-compiler": "2.6.14"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

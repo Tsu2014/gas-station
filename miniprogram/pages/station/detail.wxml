@@ -1,0 +1,39 @@
+<view class="container" wx:if="{{station}}">
+  <view class="card">
+    <view style="font-size:34rpx;font-weight:bold">{{station.name}}</view>
+    <view class="muted" style="margin-top:12rpx">{{station.province}}{{station.city}}{{station.address}}</view>
+    <view class="muted" style="margin-top:8rpx">营业时间：{{station.businessHours}}　电话：{{station.phone}}</view>
+  </view>
+
+  <view class="card">
+    <view style="font-weight:bold;margin-bottom:16rpx">今日油价（元/升）</view>
+    <view class="row-between" wx:for="{{prices}}" wx:key="id" style="padding:12rpx 0;border-bottom:1rpx solid #f2f2f2"
+          data-index="{{index}}" bindtap="selectPrice">
+      <view>
+        <text>{{item.fuelType}}</text>
+        <text class="muted" style="margin-left:16rpx;text-decoration:line-through">{{item.listPrice}}</text>
+      </view>
+      <view>
+        <text class="price">{{item.salePrice}}</text>
+        <text class="tag" wx:if="{{selectedPrice && selectedPrice.fuelType === item.fuelType}}" style="margin-left:12rpx">已选</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view style="font-weight:bold;margin-bottom:16rpx">加油枪</view>
+    <view style="display:flex;flex-wrap:wrap">
+      <view wx:for="{{guns}}" wx:key="id" data-index="{{index}}" bindtap="selectGun"
+            style="width:31%;margin:1%;padding:16rpx 0;text-align:center;border-radius:12rpx;
+                   background:{{selectedGun && selectedGun.id === item.id ? '#fff3e6' : '#f7f7f7'}};
+                   border:1rpx solid {{selectedGun && selectedGun.id === item.id ? '#ff6a00' : '#eee'}}">
+        <view>{{item.gunNo}} 号枪</view>
+        <view class="muted">{{item.fuelType}}</view>
+        <view class="tag" wx:if="{{item.status === 1}}">空闲</view>
+        <view class="muted" wx:else>{{item.status === 2 ? '使用中' : '故障'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="btn-primary" bindtap="goRefuel">去加油</view>
+</view>

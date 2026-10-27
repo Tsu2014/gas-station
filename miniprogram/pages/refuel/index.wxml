@@ -1,0 +1,60 @@
+<view class="container">
+  <view class="card">
+    <view style="font-size:32rpx;font-weight:bold">{{stationName || '加油站'}}</view>
+    <view class="row-between" style="margin-top:12rpx">
+      <text class="muted">{{gunNo ? gunNo + ' 号枪' : '未选择油枪'}}　{{fuelType}}</text>
+      <text class="price">{{unitPrice}} 元/升</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view style="font-weight:bold;margin-bottom:16rpx">加油金额</view>
+    <view style="display:flex;flex-wrap:wrap">
+      <view wx:for="{{[100,200,300,500]}}" wx:key="*this" data-value="{{item}}" bindtap="chooseAmount"
+            style="width:31%;margin:1%;padding:16rpx 0;text-align:center;border-radius:12rpx;
+                   background:{{amount === item ? '#fff3e6' : '#f7f7f7'}};
+                   border:1rpx solid {{amount === item ? '#ff6a00' : '#eee'}}">{{item}} 元</view>
+    </view>
+    <view class="row-between" style="margin-top:20rpx">
+      <text class="muted">自定义金额</text>
+      <input type="digit" value="{{amount}}" bindinput="onAmountInput" bindblur="onAmountBlur"
+             style="text-align:right;width:200rpx" placeholder="请输入金额"/>
+    </view>
+    <view class="row-between" style="margin-top:12rpx">
+      <text class="muted">预计加油</text>
+      <text>{{liters}} 升</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view style="font-weight:bold;margin-bottom:16rpx">优惠券（{{coupons.length}} 张可用）</view>
+    <view wx:if="{{coupons.length === 0}}" class="muted">暂无可用优惠券</view>
+    <view class="row-between" wx:for="{{coupons}}" wx:key="id" data-index="{{index}}" bindtap="selectCoupon"
+          style="padding:14rpx 0;border-bottom:1rpx solid #f2f2f2">
+      <view>
+        <text>{{item.couponName}}</text>
+        <text class="muted" style="margin-left:12rpx">-{{item.discountAmount}} 元</text>
+      </view>
+      <text class="tag" wx:if="{{selectedCoupon && selectedCoupon.id === item.id}}">已使用</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view style="font-weight:bold;margin-bottom:16rpx">支付方式</view>
+    <view class="row-between" data-type="balance" bindtap="selectPayType" style="padding:14rpx 0">
+      <text>余额支付</text>
+      <text class="tag" wx:if="{{payType === 'balance'}}">已选</text>
+    </view>
+    <view class="row-between" data-type="wx" bindtap="selectPayType" style="padding:14rpx 0">
+      <text>微信支付</text>
+      <text class="tag" wx:if="{{payType === 'wx'}}">已选</text>
+    </view>
+  </view>
+
+  <view class="row-between" style="padding:20rpx 10rpx">
+    <text>实付金额</text>
+    <text class="price">¥ {{selectedCoupon ? amount - selectedCoupon.discountAmount : amount}}</text>
+  </view>
+
+  <view class="btn-primary" bindtap="submit">{{submitting ? '提交中…' : '确认下单并支付'}}</view>
+</view>

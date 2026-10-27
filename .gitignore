@@ -1,0 +1,39 @@
+### Java / Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.log
+logs/
+*.class
+
+### Node
+node_modules/
+dist/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+
+### 小程序
+miniprogram/miniprogram_npm/
+miniprogram/node_modules/
+project.private.config.json
+
+### IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+### OS
+Thumbs.db
+
+### 临时目录
+.tmp/
+

@@ -1,0 +1,28 @@
+<view class="container" wx:if="{{order}}">
+  <view class="card">
+    <view class="row-between">
+      <text style="font-size:32rpx;font-weight:bold">{{statusText[order.status]}}</text>
+      <text class="price">¥ {{order.payAmount}}</text>
+    </view>
+    <view class="muted" style="margin-top:12rpx">订单号：{{order.orderNo}}</view>
+    <view class="muted" style="margin-top:8rpx">下单时间：{{order.createTime}}</view>
+    <view class="muted" style="margin-top:8rpx">支付时间：{{order.payTime || '-'}}</view>
+  </view>
+
+  <view class="card">
+    <view class="row-between" style="padding:10rpx 0"><text class="muted">油站</text><text>{{order.stationName}}</text></view>
+    <view class="row-between" style="padding:10rpx 0"><text class="muted">油品</text><text>{{order.fuelType}}</text></view>
+    <view class="row-between" style="padding:10rpx 0"><text class="muted">油枪</text><text>{{order.gunNo || '-'}}</text></view>
+    <view class="row-between" style="padding:10rpx 0"><text class="muted">单价</text><text>{{order.unitPrice}} 元/升</text></view>
+    <view class="row-between" style="padding:10rpx 0"><text class="muted">升数</text><text>{{order.liters}} 升</text></view>
+    <view class="row-between" style="padding:10rpx 0"><text class="muted">优惠</text><text>-{{order.discountAmount}} 元</text></view>
+    <view class="row-between" style="padding:10rpx 0"><text class="muted">支付方式</text>
+      <text>{{order.payType === 'balance' ? '余额支付' : (order.payType === 'wx' ? '微信支付' : '-')}}</text></view>
+    <view class="row-between" style="padding:10rpx 0"><text class="muted">获得积分</text><text>{{order.points || 0}}</text></view>
+  </view>
+
+  <view wx:if="{{order.status === 0}}" style="display:flex">
+    <view style="flex:1;margin-right:16rpx" class="btn-default" bindtap="cancel">取消订单</view>
+    <view style="flex:1" class="btn-primary" bindtap="pay">立即支付</view>
+  </view>
+</view>

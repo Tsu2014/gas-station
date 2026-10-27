@@ -1,0 +1,45 @@
+<view class="container">
+  <view style="display:flex;background:#fff;border-radius:16rpx;padding:10rpx;margin-bottom:20rpx">
+    <view wx:for="{{tabs}}" wx:key="*this" data-index="{{index}}" bindtap="switchTab"
+          style="flex:1;text-align:center;padding:14rpx 0;color:{{activeTab === index ? '#ff6a00' : '#666'}};
+                 font-weight:{{activeTab === index ? 'bold' : 'normal'}}">{{item}}</view>
+  </view>
+
+  <!-- 领券中心 -->
+  <block wx:if="{{activeTab === 0}}">
+    <view wx:if="{{center.length === 0}}" class="empty">暂无可领取的优惠券</view>
+    <view class="card" wx:for="{{center}}" wx:key="id">
+      <view class="row-between">
+        <view>
+          <view style="font-weight:bold">{{item.name}}</view>
+          <view class="muted" style="margin-top:8rpx">
+            {{item.type === 2 ? '折扣 ' + item.discount : '满 ' + item.threshold + ' 减 ' + item.amount}}
+          </view>
+          <view class="muted" style="margin-top:8rpx">有效期至 {{item.endTime}}</view>
+        </view>
+        <view>
+          <text class="tag" wx:if="{{item.remain === 0}}">已领取</text>
+          <text class="tag" wx:else data-id="{{item.id}}" bindtap="receive">立即领取</text>
+          <view class="muted" style="margin-top:8rpx">剩余 {{item.remain}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 我的优惠券 -->
+  <block wx:else>
+    <view wx:if="{{mine.length === 0}}" class="empty">还没有优惠券，去领券中心看看</view>
+    <view class="card" wx:for="{{mine}}" wx:key="id">
+      <view class="row-between">
+        <view>
+          <view style="font-weight:bold">{{item.couponName}}</view>
+          <view class="muted" style="margin-top:8rpx">
+            {{item.couponType === 2 ? '折扣券' : '满 ' + item.threshold + ' 减 ' + item.amount}}
+          </view>
+          <view class="muted" style="margin-top:8rpx">有效期至 {{item.endTime}}</view>
+        </view>
+        <text class="tag">{{item.status === 0 ? '未使用' : (item.status === 1 ? '已使用' : '已过期')}}</text>
+      </view>
+    </view>
+  </block>
+</view>

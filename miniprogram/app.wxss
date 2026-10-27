@@ -1,0 +1,74 @@
+page {
+  background-color: #f5f5f5;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.container {
+  padding: 20rpx;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.muted {
+  color: #999;
+  font-size: 24rpx;
+}
+
+.primary {
+  color: #ff6a00;
+}
+
+.price {
+  color: #ff6a00;
+  font-weight: bold;
+  font-size: 36rpx;
+}
+
+.btn-primary {
+  background: #ff6a00;
+  color: #fff;
+  border-radius: 44rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 30rpx;
+}
+
+.btn-default {
+  background: #fff;
+  color: #666;
+  border: 1rpx solid #ddd;
+  border-radius: 44rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 30rpx;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  background: #fff3e6;
+  color: #ff6a00;
+}
+
+.empty {
+  text-align: center;
+  color: #aaa;
+  padding: 120rpx 0;
+}
