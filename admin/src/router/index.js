@@ -25,20 +25,6 @@ export const routes = [
     ]
   },
   {
-    path: '/station',
-    component: Layout,
-    redirect: '/station/index',
-    meta: { title: '油站管理', icon: 'el-icon-office-building' },
-    children: [
-      {
-        path: 'index',
-        name: 'Station',
-        component: () => import('@/views/station/index.vue'),
-        meta: { title: '油站与油价' }
-      }
-    ]
-  },
-  {
     path: '/order',
     component: Layout,
     redirect: '/order/index',
@@ -49,6 +35,12 @@ export const routes = [
         name: 'Order',
         component: () => import('@/views/order/index.vue'),
         meta: { title: '加油订单' }
+      },
+      {
+        path: 'reserve',
+        name: 'ReserveOrder',
+        component: () => import('@/views/reserve/index.vue'),
+        meta: { title: '预约订单' }
       }
     ]
   },
@@ -84,8 +76,14 @@ export const routes = [
     path: '/system',
     component: Layout,
     redirect: '/system/user',
-    meta: { title: '系统管理', icon: 'el-icon-setting' },
+    meta: { title: '系统设置', icon: 'el-icon-setting' },
     children: [
+      {
+        path: 'station',
+        name: 'Station',
+        component: () => import('@/views/station/index.vue'),
+        meta: { title: '油站管理' }
+      },
       {
         path: 'user',
         name: 'User',
