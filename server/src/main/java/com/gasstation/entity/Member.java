@@ -29,6 +29,12 @@ public class Member extends BaseEntity {
 
     private String phone;
 
+    /** 当前车牌号 */
+    private String plateNo;
+
+    /** 默认加油站 ID */
+    private Long defaultStationId;
+
     /** 账户余额 */
     private BigDecimal balance;
 

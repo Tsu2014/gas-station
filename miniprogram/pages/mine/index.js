@@ -4,7 +4,9 @@ const app = getApp()
 Page({
   data: {
     member: null,
-    logs: []
+    logs: [],
+    plateEditing: false,
+    plateInput: ''
   },
 
   onShow() {
@@ -42,9 +44,39 @@ Page({
     wx.switchTab({ url: '/pages/order/list' })
   },
 
+  goReserve() {
+    wx.switchTab({ url: '/pages/reserve/index' })
+  },
+
+  editPlate() {
+    this.setData({ plateEditing: true, plateInput: (this.data.member && this.data.member.plateNo) || '' })
+  },
+
+  closePlate() {
+    this.setData({ plateEditing: false })
+  },
+
+  onPlateInput(e) {
+    this.setData({ plateInput: e.detail.value })
+  },
+
+  savePlate() {
+    const plateNo = (this.data.plateInput || '').trim().toUpperCase()
+    if (!plateNo) {
+      wx.showToast({ title: '请输入车牌号', icon: 'none' })
+      return
+    }
+    api.updateProfile({ plateNo }).then(member => {
+      this.setData({ member, plateEditing: false })
+      wx.showToast({ title: '已保存', icon: 'success' })
+    }).catch(() => {})
+  },
+
   goCoupons() {
     wx.switchTab({ url: '/pages/coupon/index' })
   },
+
+  noop() {},
 
   typeText(type) {
     return ['', '充值', '消费', '退款', '调整'][type] || ''

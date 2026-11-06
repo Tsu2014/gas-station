@@ -50,6 +50,8 @@ public class AppMemberController {
         member.setNickname(body.getNickname());
         member.setAvatar(body.getAvatar());
         member.setPhone(body.getPhone());
+        member.setPlateNo(body.getPlateNo() == null ? null : body.getPlateNo().trim().toUpperCase());
+        member.setDefaultStationId(body.getDefaultStationId());
         memberService.updateById(member);
         return R.ok(MemberVO.from(memberService.getById(memberId)));
     }

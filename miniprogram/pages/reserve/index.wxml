@@ -1,0 +1,125 @@
+<view class="container">
+  <!-- 进行中的预约 -->
+  <block wx:if="{{active}}">
+    <view class="card status-card">
+      <view class="status-banner">
+        <view class="status-title">预约已提交，等待油站确认</view>
+        <view class="status-sub">{{countdown}}</view>
+      </view>
+      <view class="row-between info-row">
+        <text class="muted">车牌号</text>
+        <text class="plate">{{active.plateNo}}</text>
+      </view>
+      <view class="row-between info-row">
+        <text class="muted">加油站</text>
+        <text>{{active.stationName}}</text>
+      </view>
+      <view class="row-between info-row">
+        <text class="muted">油品 / 油量</text>
+        <text>{{active.fuelType}} · {{active.liters}} 升</text>
+      </view>
+      <view class="row-between info-row">
+        <text class="muted">预估金额</text>
+        <text class="primary">¥ {{active.estAmount}}</text>
+      </view>
+      <view class="row-between info-row">
+        <text class="muted">预计到达</text>
+        <text>{{active.expectTimeText || active.expectTime}}</text>
+      </view>
+      <view class="row-between info-row">
+        <text class="muted">预约单号</text>
+        <text class="muted">{{active.reserveNo}}</text>
+      </view>
+      <view class="btn-default cancel-btn" bindtap="cancelActive">取消预约</view>
+    </view>
+  </block>
+
+  <!-- 预约表单 -->
+  <block wx:else>
+    <view class="card">
+      <view class="card-title">车牌号</view>
+      <input class="plate-input" value="{{plateNo}}" bindinput="onPlateInput" placeholder="请输入车牌号，如 京A88888" maxlength="8"/>
+    </view>
+
+    <view class="card">
+      <view class="row-between">
+        <view class="card-title">加油站</view>
+        <text class="muted" wx:if="{{stations.length === 0}}">加载中…</text>
+      </view>
+      <picker mode="selector" range="{{stations}}" range-key="name" value="{{stationIndex}}" bindchange="onStationChange">
+        <view class="picker-row">
+          <text>{{stationIndex >= 0 ? stations[stationIndex].name : '请选择加油站'}}</text>
+          <text class="muted">›</text>
+        </view>
+      </picker>
+      <view class="muted station-addr" wx:if="{{stationIndex >= 0}}">{{stations[stationIndex].address}}</view>
+      <view class="default-row" bindtap="toggleSetDefault">
+        <view class="checkbox {{setDefault ? 'checked' : ''}}">{{setDefault ? '✓' : ''}}</view>
+        <text class="muted">设为默认加油站</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card-title">油品</view>
+      <view class="chips" wx:if="{{prices.length > 0}}">
+        <view wx:for="{{prices}}" wx:key="fuelType" data-index="{{index}}" bindtap="onFuelChange"
+              class="chip {{fuelIndex === index ? 'chip-active' : ''}}">
+          <view>{{item.fuelType}}</view>
+          <view class="chip-price">{{item.salePrice}} 元/升</view>
+        </view>
+      </view>
+      <view class="muted" wx:else>请选择加油站后选择油品</view>
+    </view>
+
+    <view class="card">
+      <view class="card-title">预加油量（升）</view>
+      <view class="chips">
+        <view wx:for="{{litersOptions}}" wx:key="*this" data-value="{{item}}" bindtap="onLitersTap"
+              class="chip {{litersOption === item ? 'chip-active' : ''}}">{{item}} 升</view>
+      </view>
+      <view class="row-between" style="margin-top:16rpx">
+        <text class="muted">自定义油量</text>
+        <input type="digit" value="{{liters}}" bindinput="onLitersInput" class="inline-input" placeholder="升"/>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card-title">预计到达时间</view>
+      <view class="chips">
+        <view wx:for="{{minutesOptions}}" wx:key="value" data-value="{{item.value}}" bindtap="onMinutesTap"
+              class="chip {{minutes === item.value && !customMinutes ? 'chip-active' : ''}}">{{item.label}}</view>
+      </view>
+      <view class="row-between" style="margin-top:16rpx">
+        <text class="muted">自定义（分钟后到达）</text>
+        <input type="number" value="{{customMinutes}}" bindinput="onCustomMinutes" class="inline-input" placeholder="如 45"/>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card-title">备注（选填）</view>
+      <input class="remark-input" value="{{remark}}" bindinput="onRemarkInput" placeholder="如：需要发票、加满跳枪等" maxlength="100"/>
+    </view>
+
+    <view class="row-between summary-row">
+      <text>预估金额</text>
+      <text class="price">¥ {{estAmount}}</text>
+    </view>
+
+    <view class="btn-primary" bindtap="submit">{{submitting ? '提交中…' : '提交预约'}}</view>
+    <view class="muted tip">提交后油站将在看板实时看到您的预约，确认前可随时取消</view>
+  </block>
+
+  <!-- 预约记录 -->
+  <view class="card" wx:if="{{records.length > 0}}" style="margin-top:20rpx">
+    <view class="card-title">预约记录</view>
+    <view wx:for="{{records}}" wx:key="id" class="record-row">
+      <view class="row-between">
+        <text class="plate-small">{{item.plateNo}}</text>
+        <text class="record-status status-{{item.status}}">{{item.statusText}}</text>
+      </view>
+      <view class="muted record-line">{{item.stationName}} · {{item.fuelType}} {{item.liters}} 升</view>
+      <view class="muted record-line">预计到达 {{item.expectTimeText}} · 预约于 {{item.createTimeText}}</view>
+      <view class="reply" wx:if="{{item.status === 2 && item.reply}}">油站回复：{{item.reply}}</view>
+    </view>
+  </view>
+</view>
