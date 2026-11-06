@@ -79,6 +79,8 @@ CREATE TABLE `gs_member` (
     `nickname`   VARCHAR(64)    DEFAULT NULL COMMENT '昵称',
     `avatar`     VARCHAR(255)   DEFAULT NULL COMMENT '头像',
     `phone`      VARCHAR(20)    DEFAULT NULL COMMENT '手机号',
+    `plate_no`   VARCHAR(16)    DEFAULT NULL COMMENT '当前车牌号',
+    `default_station_id` BIGINT DEFAULT NULL COMMENT '默认加油站 ID',
     `balance`    DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '余额',
     `points`     INT            NOT NULL DEFAULT 0 COMMENT '积分',
     `level`      TINYINT        NOT NULL DEFAULT 1 COMMENT '1 普通 2 银卡 3 金卡',
@@ -156,6 +158,33 @@ CREATE TABLE `gs_order` (
     KEY `idx_station` (`station_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '加油订单';
 
+DROP TABLE IF EXISTS `gs_reserve_order`;
+CREATE TABLE `gs_reserve_order` (
+    `id`              BIGINT         NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `reserve_no`      VARCHAR(32)    NOT NULL COMMENT '预约单号',
+    `member_id`       BIGINT         NOT NULL COMMENT '会员 ID',
+    `station_id`      BIGINT         NOT NULL COMMENT '油站 ID',
+    `station_name`    VARCHAR(128)   DEFAULT NULL COMMENT '油站名称（快照）',
+    `plate_no`        VARCHAR(16)    NOT NULL COMMENT '车牌号',
+    `fuel_type`       VARCHAR(16)    NOT NULL COMMENT '油品 92#/95#/98#/0#',
+    `unit_price`      DECIMAL(10, 2) DEFAULT NULL COMMENT '预约时单价（元/升）',
+    `liters`          DECIMAL(10, 2) NOT NULL COMMENT '预加油量（升）',
+    `est_amount`      DECIMAL(10, 2) DEFAULT NULL COMMENT '预估金额（元）',
+    `expect_time`     DATETIME       NOT NULL COMMENT '预计到达时间',
+    `status`          TINYINT        NOT NULL DEFAULT 0 COMMENT '0 待确认 1 已加油 2 已拒绝 3 已取消',
+    `reply`           VARCHAR(255)   DEFAULT NULL COMMENT '后台回复（拒绝原因等）',
+    `handle_time`     DATETIME       DEFAULT NULL COMMENT '后台处理时间',
+    `remark`          VARCHAR(255)   DEFAULT NULL COMMENT '备注',
+    `create_time`     DATETIME       DEFAULT CURRENT_TIMESTAMP,
+    `update_time`     DATETIME       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `deleted`         TINYINT        NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_reserve_no` (`reserve_no`),
+    KEY `idx_member` (`member_id`, `status`),
+    KEY `idx_status_expect` (`status`, `expect_time`),
+    KEY `idx_plate` (`plate_no`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '预约加油订单';
+
 DROP TABLE IF EXISTS `gs_balance_log`;
 CREATE TABLE `gs_balance_log` (
     `id`            BIGINT         NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -204,9 +233,9 @@ VALUES (1, '92#', 7.85, 7.45, NOW(), 1), (1, '95#', 8.35, 7.95, NOW(), 1),
        (3, '98#', 9.35, 8.90, NOW(), 1), (3, '0#', 7.55, 7.15, NOW(), 1);
 
 -- 会员（openid: mock_member_001，未配置微信时可用该 code 登录）
-INSERT INTO `gs_member` (`openid`, `nickname`, `avatar`, `phone`, `balance`, `points`, `level`, `status`)
-VALUES ('mock_member_001', '体验用户', '', '13900000001', 500.00, 120, 1, 1),
-       ('mock_member_002', '王小美', '', '13900000002', 88.00, 30, 1, 1);
+INSERT INTO `gs_member` (`openid`, `nickname`, `avatar`, `phone`, `plate_no`, `default_station_id`, `balance`, `points`, `level`, `status`)
+VALUES ('mock_member_001', '体验用户', '', '13900000001', '京A88888', 1, 500.00, 120, 1, 1),
+       ('mock_member_002', '王小美', '', '13900000002', '京N12345', NULL, 88.00, 30, 1, 1);
 
 -- 优惠券
 INSERT INTO `gs_coupon` (`name`, `type`, `threshold`, `amount`, `discount`, `total`, `remain`, `start_time`, `end_time`, `status`)
@@ -224,3 +253,11 @@ INSERT INTO `gs_order` (`order_no`, `member_id`, `station_id`, `gun_id`, `gun_no
                         `status`, `pay_time`)
 VALUES ('GS202601010930000001', 1, 1, 1, '01', '92#', 7.45, 40.00, 298.00, NULL, 0.00, 298.00, 298, 'balance', 2, NOW()),
        ('GS202601021015000002', 2, 2, 5, '01', '92#', 7.50, 20.00, 150.00, NULL, 0.00, 150.00, 150, 'wx', 2, NOW());
+
+-- 预约加油示例
+INSERT INTO `gs_reserve_order` (`reserve_no`, `member_id`, `station_id`, `station_name`, `plate_no`, `fuel_type`,
+                                `unit_price`, `liters`, `est_amount`, `expect_time`, `status`)
+VALUES ('YY202601031200000001', 1, 1, '智慧加油站（国贸店）', '京A88888', '92#', 7.45, 30.00, 223.50,
+        DATE_ADD(NOW(), INTERVAL 30 MINUTE), 0),
+       ('YY202601020900000002', 2, 1, '智慧加油站（国贸店）', '京N12345', '95#', 7.95, 25.00, 198.75,
+        DATE_SUB(NOW(), INTERVAL 1 DAY), 1);
