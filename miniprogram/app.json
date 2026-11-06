@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/station/detail",
     "pages/refuel/index",
+    "pages/reserve/index",
     "pages/order/list",
     "pages/order/detail",
     "pages/coupon/index",
@@ -22,6 +23,7 @@
     "borderStyle": "black",
     "list": [
       { "pagePath": "pages/index/index", "text": "找油站" },
+      { "pagePath": "pages/reserve/index", "text": "预加油" },
       { "pagePath": "pages/order/list", "text": "订单" },
       { "pagePath": "pages/coupon/index", "text": "优惠券" },
       { "pagePath": "pages/mine/index", "text": "我的" }

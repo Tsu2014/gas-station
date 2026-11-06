@@ -25,11 +25,31 @@
   </view>
 
   <view class="card" wx:if="{{member}}">
+    <view class="row-between" style="padding:16rpx 0;border-bottom:1rpx solid #f2f2f2" bindtap="editPlate">
+      <view>
+        <text>我的车牌</text>
+        <text class="plate-no" wx:if="{{member.plateNo}}">{{member.plateNo}}</text>
+      </view>
+      <text class="muted">{{member.plateNo ? '修改' : '去设置'}} ›</text>
+    </view>
+    <view class="row-between" style="padding:16rpx 0;border-bottom:1rpx solid #f2f2f2" bindtap="goReserve">
+      <text>预约加油</text><text class="muted">›</text>
+    </view>
     <view class="row-between" style="padding:16rpx 0;border-bottom:1rpx solid #f2f2f2" bindtap="goOrders">
       <text>我的订单</text><text class="muted">›</text>
     </view>
     <view class="row-between" style="padding:16rpx 0" bindtap="goCoupons">
       <text>我的优惠券</text><text class="muted">›</text>
+    </view>
+  </view>
+
+  <!-- 车牌号编辑弹层 -->
+  <view class="plate-mask" wx:if="{{plateEditing}}" bindtap="closePlate">
+    <view class="plate-dialog" catchtap="noop">
+      <view style="font-weight:bold;margin-bottom:20rpx">设置当前车牌号</view>
+      <input class="plate-dialog-input" value="{{plateInput}}" bindinput="onPlateInput" placeholder="如 京A88888" maxlength="8" focus/>
+      <view class="muted" style="margin:12rpx 0 24rpx">预约加油时将使用该车牌号</view>
+      <view class="btn-primary" bindtap="savePlate">保存</view>
     </view>
   </view>
 

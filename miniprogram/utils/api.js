@@ -1,4 +1,4 @@
-const { get, post } = require('./request')
+const { get, post, put } = require('./request')
 
 /** 油站 */
 const nearby = (lng, lat, keyword) => get('/api/public/station/nearby', { lng, lat, keyword })
@@ -13,7 +13,14 @@ const orderDetail = orderNo => get(`/api/app/order/${orderNo}`)
 
 /** 会员 */
 const memberInfo = () => get('/api/app/member/info')
+const updateProfile = data => put('/api/app/member/profile', data)
 const balanceLogs = () => get('/api/app/member/balance-logs')
+
+/** 预约加油 */
+const createReserve = data => post('/api/app/reserve/create', data)
+const cancelReserve = id => post(`/api/app/reserve/cancel/${id}`)
+const activeReserve = () => get('/api/app/reserve/active')
+const myReserves = (current, size) => get('/api/app/reserve/page', { current, size })
 
 /** 优惠券 */
 const couponCenter = () => get('/api/app/coupon/center')
@@ -30,7 +37,12 @@ module.exports = {
   myOrders,
   orderDetail,
   memberInfo,
+  updateProfile,
   balanceLogs,
+  createReserve,
+  cancelReserve,
+  activeReserve,
+  myReserves,
   couponCenter,
   myCoupons,
   receiveCoupon,
